@@ -1,4 +1,5 @@
 import {
+  isValidObjectId,
   Model,
   models,
   Schema,
@@ -18,6 +19,15 @@ abstract class AbstractODM<T> {
 
   public async create(obj: T): Promise<T> {
     return this.model.create({ ...obj });
+  }
+
+  public async getAll(): Promise<T[]> {
+    return this.model.find();
+  }
+
+  public async getById(id: string): Promise<T | null> {
+    if (!isValidObjectId(id)) throw new Error('Invalid mongo id');
+    return this.model.findById(id);
   }
 }
 

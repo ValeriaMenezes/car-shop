@@ -7,7 +7,7 @@ class ErrorHandler {
     res: Response,
     next: NextFunction,
   ) {
-    res.status(500).json({ message: error.message });
+    res.status(422).json({ message: error.message });
     next();
   }
 }
