@@ -38,7 +38,7 @@ describe('Testando métodos relacionados a motorcycle', function () {
     expect(result).to.be.deep.equal(outputMotorcycle);
   });
 
-  it('Retornando null caso o id seja inexistente', async function () {
+  it('Retornando a mensagem esperda caso o id seja inexistente', async function () {
     Sinon.stub(Model, 'findById').resolves(null);
 
     try {
@@ -47,6 +47,73 @@ describe('Testando métodos relacionados a motorcycle', function () {
     } catch (error) {
       expect((error as Error).message).to.be.equal('Invalid mongo id');
     }
+  });
+
+  it('Retornando todos as motos', async function () {
+    const inputAllMotorCycles = [
+      {
+        id: '634852326b35b59438fbea2f',
+        model: 'Marea',
+        year: 2002,
+        color: 'Black',
+        status: true,
+        buyValue: 15.99,
+        category: 'Street',
+        engineCapacity: 1000,
+      },
+      {
+        id: '634852326b35b59438fbea31',
+        model: 'Tempra',
+        year: 1995,
+        color: 'Black',
+        buyValue: 39,
+        category: 'Street',
+        engineCapacity: 1000,
+      },
+    ];
+
+    const mapingAllMotorCycles = inputAllMotorCycles
+      .map((motorcycle) => new Motorcycle(motorcycle));
+
+    Sinon.stub(Model, 'find').resolves(mapingAllMotorCycles);
+
+    const service = new MotorcycleService();
+    const result = await service.getAll();
+
+    expect(result).to.be.deep.equal(mapingAllMotorCycles);
+  });
+
+  it('Atualizando uma moto', async function () {
+    const motorcycleInput = {
+      id: '634852326b35b59438fbea2f',
+      model: 'Marea',
+      year: 2002,
+      color: 'Black',
+      buyValue: 15.99,
+      category: 'Street',
+      engineCapacity: 1000,
+    };
+
+    const outputMototcycle = {
+      id: '634852326b35b59438fbea2f',
+      model: 'Marea',
+      year: 2002,
+      color: 'Black',
+      status: false,
+      buyValue: 15.99,
+      category: 'Street',
+      engineCapacity: 1000,
+    };
+
+    Sinon.stub(Model, 'findByIdAndUpdate').resolves(motorcycleInput);
+
+    const service = new MotorcycleService();
+    const result = await service.update(
+      '634852326b35b59438fbea2f',
+      motorcycleInput,
+    );
+
+    expect(result).to.be.deep.equal(outputMototcycle);
   });
 
   afterEach(function () {

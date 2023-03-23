@@ -38,7 +38,7 @@ describe('Testando métodos relacionados a Car', function () {
     expect(result).to.be.deep.equal(outputCar);
   });
 
-  it('Retornando null caso o id seja inexistente', async function () {
+  it('Retornando a mensagem esperada caso o id seja inexistente', async function () {
     Sinon.stub(Model, 'findById').resolves(null);
 
     try {
@@ -47,6 +47,72 @@ describe('Testando métodos relacionados a Car', function () {
     } catch (error) {
       expect((error as Error).message).to.be.equal('Invalid mongo id');
     }
+  });
+
+  it('Retornando todos os carros', async function () {
+    const inputAllCars = [
+      {
+        id: '634852326b35b59438fbea2f',
+        model: 'Marea',
+        year: 2002,
+        color: 'Black',
+        status: true,
+        buyValue: 15.99,
+        doorsQty: 4,
+        seatsQty: 5,
+      },
+      {
+        id: '634852326b35b59438fbea31',
+        model: 'Tempra',
+        year: 1995,
+        color: 'Black',
+        buyValue: 39,
+        doorsQty: 2,
+        seatsQty: 5,
+      },
+    ];
+
+    const mapingAllCars = inputAllCars.map((car) => new Car(car));
+
+    Sinon.stub(Model, 'find').resolves(mapingAllCars);
+
+    const service = new CarService();
+    const result = await service.getAll();
+
+    expect(result).to.be.deep.equal(mapingAllCars);
+  });
+
+  it('Atualizando um carro', async function () {
+    const carInput = {
+      id: '634852326b35b59438fbea2f',
+      model: 'Marea',
+      year: 2002,
+      color: 'Black',
+      buyValue: 15.99,
+      doorsQty: 4,
+      seatsQty: 5,
+    };
+
+    const outputCar = {
+      id: '634852326b35b59438fbea2f',
+      model: 'Marea',
+      year: 2002,
+      color: 'Black',
+      status: false,
+      buyValue: 15.99,
+      doorsQty: 4,
+      seatsQty: 5,
+    };
+
+    Sinon.stub(Model, 'findByIdAndUpdate').resolves(carInput);
+
+    const service = new CarService();
+    const result = await service.update(
+      '634852326b35b59438fbea2f',
+      carInput,
+    );
+
+    expect(result).to.be.deep.equal(outputCar);
   });
 
   afterEach(function () {
