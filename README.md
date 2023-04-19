@@ -42,7 +42,7 @@ Para este projeto, foi desenvolvido e aplicado os princípios de Programação O
 
 ## Contatos
 
-[![LinkedIn][LinkedIn]][LinkedIn-url]
+>[![LinkedIn][LinkedIn]][LinkedIn-url]
 [![Gmail][Gmail]][Gmail-url]
 
 [LinkedIn]: https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white
